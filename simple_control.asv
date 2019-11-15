@@ -18,8 +18,8 @@ if (clientID>-1)
     tic
     for i=1:50  
         [returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer);
-        [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_buffer);
-        imshow(image);
+            [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_streaming);
+
         disp(toc);
         %disp(norm(detectedPoint));
         pause(0.1);
