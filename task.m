@@ -26,7 +26,7 @@ if (clientID>-1)
     dVel=1;
     dSteer=0.1;
     steer_angle=0;
-    motor_velocity=dVel*4;
+    motor_velocity=dVel*3;
     brake_force=0;
     %code
     %brake part
@@ -58,7 +58,7 @@ if (clientID>-1)
     
 %     [returnCode]=vrep.simxSetJointTargetVelocity(clientID,left_motor,0,vrep.simx_opmode_blocking);
 
-    for i=1:200
+    for i=1:400
         [returnCode,detectionState_f,detectedPoint_f,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_l,detectedPoint_l,~,~]=vrep.simxReadProximitySensor(clientID,left_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_r,detectedPoint_r,~,~]=vrep.simxReadProximitySensor(clientID,right_sensor,vrep.simx_opmode_buffer);
@@ -69,7 +69,7 @@ if (clientID>-1)
         %disp(dis_l);
         disp(dis_r);
         
-        if dis_f>0&&dis_f<1.5
+        if dis_f>0.02&&dis_f<1.5
             steer_angle=0.5;
             [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
             disp(steer_angle);
