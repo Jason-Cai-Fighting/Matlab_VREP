@@ -1,5 +1,4 @@
 clc;
-a=readfis('car_control');
 vrep=remApi('remoteApi');
 vrep.simxFinish(-1);
 
@@ -15,9 +14,9 @@ if (clientID>-1)
     [returnCode,tar_pos]=vrep.simxGetObjectHandle(clientID,'TarPos',vrep.simx_opmode_blocking);
     
     [returnCode,camera]=vrep.simxGetObjectHandle(clientID,'Vision_sensor',vrep.simx_opmode_blocking);
-    [returnCode,front_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_f',vrep.simx_opmode_blocking);
-    [returnCode,left_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_l',vrep.simx_opmode_blocking);
-    [returnCode,right_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_r',vrep.simx_opmode_blocking);
+    [returnCode,front_sensor]=vrep.simxGetObjectHandle(clientID,'UltrasonicSensor_f',vrep.simx_opmode_blocking);
+    [returnCode,left_sensor]=vrep.simxGetObjectHandle(clientID,'UltrasonicSensor_l',vrep.simx_opmode_blocking);
+    [returnCode,right_sensor]=vrep.simxGetObjectHandle(clientID,'UltrasonicSensor_r',vrep.simx_opmode_blocking);
     
     [returnCode,fl_brake]=vrep.simxGetObjectHandle(clientID,'fl_brake_joint',vrep.simx_opmode_blocking);
     [returnCode,fr_brake]=vrep.simxGetObjectHandle(clientID,'fr_brake_joint',vrep.simx_opmode_blocking);
@@ -63,35 +62,28 @@ if (clientID>-1)
     
 %     [returnCode]=vrep.simxSetJointTargetVelocity(clientID,left_motor,0,vrep.simx_opmode_blocking);
 
-    for i=1:2000
+    for i=1:300
         [returnCode,detectionState_f,detectedPoint_f,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_l,detectedPoint_l,~,~]=vrep.simxReadProximitySensor(clientID,left_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_r,detectedPoint_r,~,~]=vrep.simxReadProximitySensor(clientID,right_sensor,vrep.simx_opmode_buffer);
         [returnCode,rel_pos]=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_buffer);
         %processing distance
-        dis_l=norm(detectedPoint_l);
-        if detectionState_l == 0
-            dis_l = 2;
-        end
-        
         dis_f=norm(detectedPoint_f);        
-        if detectionState_f == 0
+        if dis_f > 0 && dis_f < 0.001
             dis_f = 2;
         end
-        
+        dis_l=norm(detectedPoint_l);
+        if dis_l > 0 && dis_l < 0.001
+            dis_l = 2;
+        end
         dis_r=norm(detectedPoint_r);
-        if detectionState_r == 0
+        if dis_r > 0 && dis_r < 0.001
             dis_r = 2;
         end
         disp(dis_l);
         disp(dis_f);
         disp(dis_r);
         %deal with the target position
-        dis = norm(rel_pos);
-        if dis ~=0 && dis < 0.1
-            disp('Reach target position!');
-            break;
-        end
         tar_p = atan2d(rel_pos(2),rel_pos(1))-90;
         if tar_p < -150 && tar_p >= -180
             tar_p = -150;
@@ -100,19 +92,36 @@ if (clientID>-1)
         elseif tar_p < -210
             tar_p = tar_p + 360;
         end
-%         disp(tar_p);
-        [returnvalue]=evalfis([dis_l dis_f dis_r tar_p], a);
-        steer_angle = returnvalue(1)
-        motor_velocity = returnvalue(2);
-        times = 5;
-        if dis < 1.5
-            times = 2;
-        end
-        motor_velocity = motor_velocity * times;
-        steer_angle = -(steer_angle - 90 )/180*pi;
-        [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
-        [returnCode]=vrep.simxSetJointTargetVelocity(clientID,motor,motor_velocity,vrep.simx_opmode_blocking);
+        disp(tar_p);
+        evalfis([dis_l dis_f dis_r tar_p], a)
         
+        if dis_f>0.02&&dis_f<1.5
+            steer_angle=0.5;
+            [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
+            %disp(steer_angle);
+        end
+                
+        if dis_l>0.02&&dis_l<0.5
+            steer_angle=-0.2;
+            [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
+        elseif steer_angle == -0.2 && dis_l > 0.6
+            steer_angle=0;
+            [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
+            %disp(steer_angle);
+            %disp(dis_l);
+        end
+        if dis_r>0.02&&dis_r<0.5
+            steer_angle=0.2;
+            [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
+        elseif steer_angle == 0.2 && dis_r > 0.6
+            steer_angle=0;
+            [returnCode]=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking);
+            %disp(steer_angle);
+            %disp(dis_r);
+        end
+        %disp([norm(detectedPoint_f),norm(detectedPoint_l),norm(detectedPoint_r)]);
+        %[returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_buffer);
+        %imshow(image);
         pause(0.1)
     end
     
