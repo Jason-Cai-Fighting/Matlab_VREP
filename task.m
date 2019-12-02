@@ -18,6 +18,8 @@ if (clientID>-1)
     [returnCode,front_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_f',vrep.simx_opmode_blocking);
     [returnCode,left_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_l',vrep.simx_opmode_blocking);
     [returnCode,right_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_r',vrep.simx_opmode_blocking);
+    [returnCode,leftf_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_lf',vrep.simx_opmode_blocking);
+    [returnCode,rightf_sensor]=vrep.simxGetObjectHandle(clientID,'Sensor_rf',vrep.simx_opmode_blocking);
     
     [returnCode,fl_brake]=vrep.simxGetObjectHandle(clientID,'fl_brake_joint',vrep.simx_opmode_blocking);
     [returnCode,fr_brake]=vrep.simxGetObjectHandle(clientID,'fr_brake_joint',vrep.simx_opmode_blocking);
@@ -49,6 +51,8 @@ if (clientID>-1)
     [returnCode,detectionState_f,detectedPoint_f,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_streaming);
     [returnCode,detectionState_l,detectedPoint_l,~,~]=vrep.simxReadProximitySensor(clientID,left_sensor,vrep.simx_opmode_streaming);
     [returnCode,detectionState_r,detectedPoint_r,~,~]=vrep.simxReadProximitySensor(clientID,right_sensor,vrep.simx_opmode_streaming);
+    [returnCode,detectionState_lf,detectedPoint_lf,~,~]=vrep.simxReadProximitySensor(clientID,leftf_sensor,vrep.simx_opmode_streaming);
+    [returnCode,detectionState_rf,detectedPoint_rf,~,~]=vrep.simxReadProximitySensor(clientID,rightf_sensor,vrep.simx_opmode_streaming);
 %     [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_streaming);
     
 %     tic
@@ -67,11 +71,18 @@ if (clientID>-1)
         [returnCode,detectionState_f,detectedPoint_f,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_l,detectedPoint_l,~,~]=vrep.simxReadProximitySensor(clientID,left_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_r,detectedPoint_r,~,~]=vrep.simxReadProximitySensor(clientID,right_sensor,vrep.simx_opmode_buffer);
+        [returnCode,detectionState_lf,detectedPoint_lf,~,~]=vrep.simxReadProximitySensor(clientID,leftf_sensor,vrep.simx_opmode_buffer);
+        [returnCode,detectionState_rf,detectedPoint_rf,~,~]=vrep.simxReadProximitySensor(clientID,rightf_sensor,vrep.simx_opmode_buffer);
         [returnCode,rel_pos]=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_buffer);
         %processing distance
         dis_l=norm(detectedPoint_l);
         if detectionState_l == 0
             dis_l = 2;
+        end
+        
+        dis_lf=norm(detectedPoint_lf);
+        if detectionState_lf == 0
+            dis_lf = 2;
         end
         
         dis_f=norm(detectedPoint_f);        
@@ -83,9 +94,16 @@ if (clientID>-1)
         if detectionState_r == 0
             dis_r = 2;
         end
+        
+        dis_rf=norm(detectedPoint_rf);
+        if detectionState_rf == 0
+            dis_rf = 2;
+        end
         disp(dis_l);
+        disp(dis_lf);
         disp(dis_f);
-        disp(dis_r);
+        disp(dis_rf);
+        disp(dis_r);    
         %deal with the target position
         dis = norm(rel_pos);
         if dis ~=0 && dis < 0.1
@@ -101,7 +119,7 @@ if (clientID>-1)
             tar_p = tar_p + 360;
         end
 %         disp(tar_p);
-        [returnvalue]=evalfis([dis_l dis_f dis_r tar_p], a);
+        [returnvalue]=evalfis([dis_l dis_f dis_r tar_p dis_lf dis_rf], a);
         steer_angle = returnvalue(1)
         motor_velocity = returnvalue(2);
         times = 5;
