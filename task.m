@@ -1,5 +1,5 @@
 clc;
-a=readfis('car_control');
+a=readfis('car_control_test');
 vrep=remApi('remoteApi');
 vrep.simxFinish(-1);
 
@@ -99,11 +99,13 @@ if (clientID>-1)
         if detectionState_rf == 0
             dis_rf = 2;
         end
-        disp(dis_l);
-        disp(dis_lf);
-        disp(dis_f);
-        disp(dis_rf);
-        disp(dis_r);    
+        input = [dis_l,dis_lf,dis_f,dis_rf,dis_r];
+        disp(input);
+%         disp(dis_l);
+%         disp(dis_lf);
+%         disp(dis_f);
+%         disp(dis_rf);
+%         disp(dis_r);    
         %deal with the target position
         dis = norm(rel_pos);
         if dis ~=0 && dis < 0.1
@@ -118,8 +120,8 @@ if (clientID>-1)
         elseif tar_p < -210
             tar_p = tar_p + 360;
         end
-%         disp(tar_p);
-        [returnvalue]=evalfis([dis_l dis_f dis_r tar_p dis_lf dis_rf], a);
+         disp(tar_p);
+        [returnvalue]=evalfis([dis_l dis_lf dis_f dis_rf dis_r tar_p], a);
         steer_angle = returnvalue(1)
         motor_velocity = returnvalue(2);
         times = 5;

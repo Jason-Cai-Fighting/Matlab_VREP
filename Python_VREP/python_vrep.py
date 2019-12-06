@@ -1,5 +1,6 @@
 import vrep
 import time
+from CarFuzzyControl import car,steer_angle,speed
 
 print ('Program started')
 vrep.simxFinish(-1) # just in case, close all opened connections

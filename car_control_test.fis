@@ -1,0 +1,104 @@
+[System]
+Name='car_control_test'
+Type='mamdani'
+Version=2.0
+NumInputs=6
+NumOutputs=2
+NumRules=24
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='dis_l'
+Range=[0 2]
+NumMFs=3
+MF1='close':'trapmf',[-1 0 0.3 0.6]
+MF2='near':'trimf',[0.5 0.5 1.4]
+MF3='far':'trapmf',[1 1.8 2 3]
+
+[Input2]
+Name='dis_lf'
+Range=[0 2]
+NumMFs=3
+MF1='close':'trapmf',[-1 0 1 1.4]
+MF2='near':'trimf',[1.2 1.5 1.8]
+MF3='far':'trimf',[1.8 2 2]
+
+[Input3]
+Name='dis_f'
+Range=[0 2]
+NumMFs=3
+MF1='close':'trapmf',[-1 0 1 1.4]
+MF2='near':'trimf',[1.2 1.5 1.8]
+MF3='far':'trapmf',[1.6 1.8 2 3]
+
+[Input4]
+Name='dis_rf'
+Range=[0 2]
+NumMFs=3
+MF1='close':'trapmf',[-1 0 1 1.4]
+MF2='near':'trimf',[1.2 1.5 1.8]
+MF3='far':'trimf',[1.8 2 2]
+
+[Input5]
+Name='dis_r'
+Range=[0 2]
+NumMFs=3
+MF1='close':'trapmf',[-1 0 0.3 0.6]
+MF2='near':'trimf',[0.5 0.5 1.4]
+MF3='far':'trapmf',[1 1.8 2 3]
+
+[Input6]
+Name='goal_position'
+Range=[-150 150]
+NumMFs=3
+MF1='left':'trapmf',[10 60 150 180]
+MF2='front':'trimf',[-20 0 20]
+MF3='right':'trapmf',[-180 -150 -60 -10]
+
+[Output1]
+Name='steer_angle'
+Range=[50 130]
+NumMFs=5
+MF1='turn_l':'trimf',[0 50 80]
+MF2='turn_lsmall':'trimf',[55 75 90]
+MF3='forward':'trimf',[70 90 110]
+MF4='turn_rsmall':'trimf',[90 105 125]
+MF5='turn_r':'trimf',[100 130 180]
+
+[Output2]
+Name='speed'
+Range=[0 2]
+NumMFs=3
+MF1='stop':'trimf',[-1 0 0]
+MF2='slow':'trimf',[0.2 0.2 1.2]
+MF3='quick':'trimf',[0.8 1.4 1.4]
+
+[Rules]
+1 0 1 0 1 0, 3 1 (1) : 1
+0 -1 3 -1 0 2, 3 3 (1) : 1
+0 1 3 -1 0 2, 4 2 (1) : 1
+0 -1 3 1 0 2, 2 2 (1) : 1
+0 1 3 1 0 2, 3 2 (1) : 1
+3 0 -3 0 0 2, 1 2 (1) : 1
+-3 0 -3 0 3 2, 5 2 (1) : 1
+2 0 -3 0 -3 2, 2 2 (1) : 1
+1 0 -3 0 2 2, 4 2 (1) : 1
+1 0 -3 0 1 2, 3 1 (1) : 1
+3 0 0 0 0 1, 1 2 (1) : 1
+-3 0 3 0 0 1, 3 3 (1) : 1
+-3 0 -3 0 3 1, 5 2 (1) : 1
+1 0 -1 0 -1 1, 5 2 (1) : 1
+0 0 0 0 3 3, 5 2 (1) : 1
+0 0 3 0 -3 3, 3 3 (1) : 1
+3 0 -3 0 -3 3, 1 2 (1) : 1
+-1 0 -1 0 1 3, 1 2 (1) : 1
+0 1 0 2 0 0, 5 2 (1) : 1
+0 1 0 3 0 0, 5 2 (1) : 1
+0 2 0 3 0 0, 4 2 (1) : 1
+0 2 0 1 0 0, 1 2 (1) : 1
+0 3 0 1 0 0, 1 2 (1) : 1
+0 3 0 2 0 0, 2 2 (1) : 1

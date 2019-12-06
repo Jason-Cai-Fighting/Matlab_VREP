@@ -31,9 +31,9 @@ a = addmf(a,'dis_r','trapmf',[1 1.8 2 3],'Name','far');
 
 %input(6):goal_position
 a = addInput(a,[-150 150],'Name','goal_position');
-a = addMF(a,'goal_position','trapmf',[-180 -150 -60 -10],'Name','left');
+a = addMF(a,'goal_position','trapmf',[10 60 150 180],'Name','left');
 a = addMF(a,'goal_position','trimf',[-20 0 20],'Name','front');
-a = addmf(a,'goal_position','trapmf',[10 60 150 180],'Name','right');
+a = addmf(a,'goal_position','trapmf',[-180 -150 -60 -10],'Name','right');
 
 %output(1):steer_angle
 a = addOutput(a,[50 130],'Name','steer_angle');
@@ -51,6 +51,28 @@ a = addMF(a,'speed','trimf',[0.8 1.4 1.4],'Name','quick');
 
 %rulelist
 rulelist = [1 0 1 0 1 0 3 1 1 1;
-            -1 -1 3 -1 -1 2 3 3 1 1];
+            0 -1 3 -1 0 2 3 3 1 1
+            0 1 3 -1 0 2 4 2 1 1
+            0 -1 3 1 0 2 2 2 1 1
+            0 1 3 1 0 2 3 2 1 1
+            3 0 -3 0 0 2 1 2 1 1
+            -3 0 -3 0 3 2 5 2 1 1
+            2 0 -3 0 -3 2 2 2 1 1
+            1 0 -3 0 2 2 4 2 1 1
+            1 0 -3 0 1 2 3 1 1 1
+            3 0 0 0 0 1 1 2 1 1
+            -3 0 3 0 0 1 3 3 1 1
+            -3 0 -3 0 3 1 5 2 1 1
+            1 0 -1 0 -1 1 5 2 1 1
+            0 0 0 0 3 3 5 2 1 1
+            0 0 3 0 -3 3 3 3 1 1
+            3 0 -3 0 -3 3 1 2 1 1
+            -1 0 -1 0 1 3 1 2 1 1
+            0 1 0 2 0 0 5 2 1 1
+            0 1 0 3 0 0 5 2 1 1
+            0 2 0 3 0 0 4 2 1 1
+            0 2 0 1 0 0 1 2 1 1
+            0 3 0 1 0 0 1 2 1 1
+            0 3 0 2 0 0 2 2 1 1];
         
 a = addRule(a,rulelist);        
