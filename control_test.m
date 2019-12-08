@@ -1,9 +1,9 @@
 a = newfis('Car_control');
 %input(1):dis-l
 a = addInput(a,[0 2],'Name','dis_l');
-a = addMF(a,'dis_l','trapmf',[-1 0 0.3 0.6],'Name','close');
-a = addMF(a,'dis_l','trimf',[0.5 0.5 1.4],'Name','near');
-a = addmf(a,'dis_l','trapmf',[1 1.8 2 3],'Name','far');
+a = addMF(a,'dis_l','trapmf',[-1 0 0.2 0.5],'Name','close');
+a = addMF(a,'dis_l','trimf',[0.4 0.4 1.4],'Name','near');
+a = addmf(a,'dis_l','trapmf',[1 1.4 2 3],'Name','far');
 
 %input(2):dis-lf
 a = addInput(a,[0 2],'Name','dis_lf');
@@ -25,14 +25,14 @@ a = addMF(a,'dis_rf','trimf',[1.8 2 2],'Name','far');
 
 %input(5):dis-r
 a = addInput(a,[0 2],'Name','dis_r');
-a = addMF(a,'dis_r','trapmf',[-1 0 0.3 0.6],'Name','close');
-a = addMF(a,'dis_r','trimf',[0.5 0.5 1.4],'Name','near');
-a = addmf(a,'dis_r','trapmf',[1 1.8 2 3],'Name','far');
+a = addMF(a,'dis_r','trapmf',[-1 0 0.2 0.5],'Name','close');
+a = addMF(a,'dis_r','trimf',[0.4 0.4 1.4],'Name','near');
+a = addmf(a,'dis_r','trapmf',[1 1.4 2 3],'Name','far');
 
 %input(6):goal_position
 a = addInput(a,[-150 150],'Name','goal_position');
 a = addMF(a,'goal_position','trapmf',[10 60 150 180],'Name','left');
-a = addMF(a,'goal_position','trimf',[-20 0 20],'Name','front');
+a = addMF(a,'goal_position','trimf',[-10 0 10],'Name','front');
 a = addmf(a,'goal_position','trapmf',[-180 -150 -60 -10],'Name','right');
 
 %output(1):steer_angle
@@ -55,19 +55,19 @@ rulelist = [1 0 1 0 1 0 3 1 1 1;
             0 1 3 -1 0 2 4 2 1 1
             0 -1 3 1 0 2 2 2 1 1
             0 1 3 1 0 2 3 2 1 1
-            3 0 -3 0 0 2 1 2 1 1
-            -3 0 -3 0 3 2 5 2 1 1
+            3 -1 -3 0 0 2 1 2 1 1
+            -3 0 -3 -1 3 2 5 2 1 1
             2 0 -3 0 -3 2 2 2 1 1
             1 0 -3 0 2 2 4 2 1 1
             1 0 -3 0 1 2 3 1 1 1
-            3 0 0 0 0 1 1 2 1 1
+            3 -1 0 0 0 1 1 2 1 1
             -3 0 3 0 0 1 3 3 1 1
-            -3 0 -3 0 3 1 5 2 1 1
-            1 0 -1 0 -1 1 5 2 1 1
-            0 0 0 0 3 3 5 2 1 1
+            -3 0 -3 -1 3 1 5 2 1 1
+            1 0 -1 -1 -1 1 5 2 1 1
+            0 0 0 -1 3 3 5 2 1 1
             0 0 3 0 -3 3 3 3 1 1
-            3 0 -3 0 -3 3 1 2 1 1
-            -1 0 -1 0 1 3 1 2 1 1
+            3 -1 -3 0 -3 3 1 2 1 1
+            -1 -1 -1 0 1 3 1 2 1 1
             0 1 0 2 0 0 5 2 1 1
             0 1 0 3 0 0 5 2 1 1
             0 2 0 3 0 0 4 2 1 1
