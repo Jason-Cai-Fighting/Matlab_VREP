@@ -3,6 +3,8 @@ import time
 from math import atan2,pi
 from numpy import linalg as LA
 from CarFuzzyControl import car
+import numpy as np
+import matplotlib.pyplot as mlp
 
 print ('Program started')
 vrep.simxFinish(-1) # just in case, close all opened connections
@@ -29,6 +31,8 @@ if clientID!=-1:
     returnCode,bl_brake=vrep.simxGetObjectHandle(clientID,'bl_brake_joint',vrep.simx_opmode_blocking)
     returnCode,br_brake=vrep.simxGetObjectHandle(clientID,'br_brake_joint',vrep.simx_opmode_blocking)
 
+    returnCode,camera=vrep.simxGetObjectHandle(clientID,'Vision_sensor',vrep.simx_opmode_blocking)
+    
     #basic parameter
     max_steer_angle=0.5235987;
     motor_torque=60;
@@ -56,6 +60,7 @@ if clientID!=-1:
     returnCode,detectionState_rf,detectedPoint_rf,OH,SNV=vrep.simxReadProximitySensor(clientID,rightf_sensor,vrep.simx_opmode_streaming)
     returnCode,detectionState_r,detectedPoint_r,OH,SNV=vrep.simxReadProximitySensor(clientID,right_sensor,vrep.simx_opmode_streaming)
     returnCode,rel_pos=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_streaming);
+    returnCode,resolution,image=vrep.simxGetVisionSensorImage(clientID,camera,0,vrep.simx_opmode_streaming)
 
     for i in range(1,1000):
         #read sensor data
@@ -65,6 +70,8 @@ if clientID!=-1:
         returnCode,detectionState_lf,detectedPoint_lf,OH,SNV=vrep.simxReadProximitySensor(clientID,leftf_sensor,vrep.simx_opmode_buffer)
         returnCode,detectionState_rf,detectedPoint_rf,OH,SNV=vrep.simxReadProximitySensor(clientID,rightf_sensor,vrep.simx_opmode_buffer)
         returnCode,rel_pos=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_buffer)
+        returnCode,resolution,image=vrep.simxGetVisionSensorImage(clientID,camera,0,vrep.simx_opmode_buffer)
+        
         #sensor data processing
         dis_l=LA.norm(detectedPoint_l)
         if detectionState_l == 0:
@@ -117,6 +124,11 @@ if clientID!=-1:
         #set value in vrep
         returnCode=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking)
         returnCode=vrep.simxSetJointTargetVelocity(clientID,motor,motor_velocity,vrep.simx_opmode_blocking)
+        
+        #image processing
+        im = np.array(image, dtype=np.uint8)
+        im.resize([256,256,3])
+        mlp.imshow(im)
         
         time.sleep(0.1)
     #stop the car

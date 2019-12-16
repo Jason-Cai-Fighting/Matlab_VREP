@@ -53,7 +53,7 @@ if (clientID>-1)
     [returnCode,detectionState_r,detectedPoint_r,~,~]=vrep.simxReadProximitySensor(clientID,right_sensor,vrep.simx_opmode_streaming);
     [returnCode,detectionState_lf,detectedPoint_lf,~,~]=vrep.simxReadProximitySensor(clientID,leftf_sensor,vrep.simx_opmode_streaming);
     [returnCode,detectionState_rf,detectedPoint_rf,~,~]=vrep.simxReadProximitySensor(clientID,rightf_sensor,vrep.simx_opmode_streaming);
-%     [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_streaming);
+    [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_streaming);
     
 %     tic
 %     for i=1:50  
@@ -74,6 +74,9 @@ if (clientID>-1)
         [returnCode,detectionState_lf,detectedPoint_lf,~,~]=vrep.simxReadProximitySensor(clientID,leftf_sensor,vrep.simx_opmode_buffer);
         [returnCode,detectionState_rf,detectedPoint_rf,~,~]=vrep.simxReadProximitySensor(clientID,rightf_sensor,vrep.simx_opmode_buffer);
         [returnCode,rel_pos]=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_buffer);
+        [returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer);
+        [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_buffer);
+        imshow(image);
         %processing distance
         dis_l=norm(detectedPoint_l);
         if detectionState_l == 0
