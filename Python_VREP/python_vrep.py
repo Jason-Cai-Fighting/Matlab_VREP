@@ -53,7 +53,7 @@ if clientID!=-1:
     returnCode=vrep.simxSetJointTargetVelocity(clientID,motor,motor_velocity,vrep.simx_opmode_blocking)
     returnCode=vrep.simxSetJointTargetPosition(clientID,steer,steer_angle,vrep.simx_opmode_blocking)
 
-    #read data from vrep
+    #read data from vreppython image
     returnCode,detectionState_l,detectedPoint_l,OH,SNV=vrep.simxReadProximitySensor(clientID,left_sensor,vrep.simx_opmode_streaming)    
     returnCode,detectionState_lf,detectedPoint_lf,OH,SNV=vrep.simxReadProximitySensor(clientID,leftf_sensor,vrep.simx_opmode_streaming)
     returnCode,detectionState_f,detectedPoint_f,OH,SNV=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_streaming)
@@ -62,6 +62,7 @@ if clientID!=-1:
     returnCode,rel_pos=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_streaming);
     returnCode,resolution,image=vrep.simxGetVisionSensorImage(clientID,camera,0,vrep.simx_opmode_streaming)
 
+    print(time.localtime( time.time() ))
     for i in range(1,1000):
         #read sensor data
         returnCode,detectionState_f,detectedPoint_f,OH,SNV=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer)
@@ -96,6 +97,7 @@ if clientID!=-1:
         dis = LA.norm(rel_pos)
         if dis !=0 and dis < 0.1:
             print('Reach target position!')
+            print(time.localtime( time.time() ))
             break
         #target position calculation
         tar_p = atan2(rel_pos[1],rel_pos[0])/pi*180-90
@@ -107,13 +109,14 @@ if clientID!=-1:
             tar_p = tar_p + 360
         #display sensor data
         input = [dis_l,dis_lf,dis_f,dis_rf,dis_r,tar_p]
-        print(input)
+        #print(input)
         #input sensor data to fuzzy controller
         car.inputs({'dis_l':dis_l ,'dis_lf':dis_lf ,'dis_f':dis_f ,'dis_rf':dis_rf ,'dis_r':dis_r ,'goal_position':tar_p})
         car.compute()
         steer_angle = car.output['steer_angle']
+        a = int(steer_angle)
         motor_velocity = car.output['speed']
-        print(steer_angle,motor_velocity)
+        #print(steer_angle,motor_velocity)
         #when approaching destination, slow down
         times = 5
         if dis < 1.5:
@@ -127,8 +130,8 @@ if clientID!=-1:
         
         #image processing
         im = np.array(image, dtype=np.uint8)
-        im.resize([256,256,3])
-        mlp.imshow(im)
+        im.resize([128,128,3])
+        mlp.imsave('/home/jason/repositories/img/'+str(i).zfill(4)+' '+str(a)+'.png',im,origin='lower')
         
         time.sleep(0.1)
     #stop the car
