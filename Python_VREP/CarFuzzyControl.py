@@ -74,35 +74,37 @@ rule3 = ctrl.Rule(dis_lf['close'] & dis_f['far'] & ~dis_rf['close'] & goal_posit
 rule4 = ctrl.Rule(~dis_lf['close'] & dis_f['far'] & dis_rf['close'] & goal_position['front'], (steer_angle['turn_lsmall'], speed['slow']))
 rule5 = ctrl.Rule(dis_lf['close'] & dis_f['far'] & dis_rf['close'] & goal_position['front'], (steer_angle['forward'], speed['slow']))
 
-rule6 = ctrl.Rule(dis_l['far'] & ~dis_lf['close'] & ~dis_f['far'] & goal_position['front'], (steer_angle['turn_l'], speed['slow']))
-rule7 = ctrl.Rule(~dis_l['far'] & ~dis_f['far'] & ~dis_rf['close'] & dis_r['far'] & goal_position['front'], (steer_angle['turn_r'], speed['slow']))
-rule8 = ctrl.Rule(dis_l['near'] & ~dis_f['far'] & ~dis_r['far'] & goal_position['front'], (steer_angle['turn_lsmall'], speed['slow']))
-rule9 = ctrl.Rule(dis_l['close'] & ~dis_f['far'] & dis_r['near'] & goal_position['front'], (steer_angle['turn_rsmall'], speed['slow']))
-rule10 = ctrl.Rule(dis_l['close'] & ~dis_f['far'] & dis_r['close'] & goal_position['front'], (steer_angle['forward'], speed['stop']))
+rule6 = ctrl.Rule(dis_l['far'] & dis_lf['far'] & ~dis_f['far'] & goal_position['front'], (steer_angle['turn_l'], speed['slow']))
+rule7 = ctrl.Rule(dis_l['far'] & dis_lf['near'] & ~dis_f['far'] & dis_rf['far'] & dis_r['far'] & goal_position['front'], (steer_angle['turn_r'], speed['slow']))
+rule8 = ctrl.Rule(dis_l['far'] & dis_lf['near'] & ~dis_f['far'] & dis_rf['near'] & goal_position['front'], (steer_angle['turn_l'], speed['slow']))
+rule9 = ctrl.Rule(~dis_l['far'] & ~dis_f['far'] & ~dis_rf['close'] & dis_r['far'] & goal_position['front'], (steer_angle['turn_r'], speed['slow']))
+rule10 = ctrl.Rule(dis_l['near'] & ~dis_f['far'] & ~dis_r['far'] & goal_position['front'], (steer_angle['turn_lsmall'], speed['slow']))
+rule11 = ctrl.Rule(dis_l['close'] & ~dis_f['far'] & dis_r['near'] & goal_position['front'], (steer_angle['turn_rsmall'], speed['slow']))
+rule12 = ctrl.Rule(dis_l['close'] & ~dis_f['far'] & dis_r['close'] & goal_position['front'], (steer_angle['forward'], speed['stop']))
 
-rule11 = ctrl.Rule(dis_l['far'] & ~dis_lf['close'] & goal_position['left'], (steer_angle['turn_l'], speed['slow']))
-rule12 = ctrl.Rule(~dis_l['far'] & dis_f['far'] & goal_position['left'], (steer_angle['forward'], speed['quick']))
-rule13 = ctrl.Rule(~dis_l['far'] & ~dis_f['far'] & ~dis_rf['close'] & dis_r['far'] & goal_position['left'], (steer_angle['turn_r'], speed['slow']))
-rule14 = ctrl.Rule(dis_l['close'] & ~dis_f['close'] & ~dis_rf['close'] & ~dis_r['close'] & goal_position['left'], (steer_angle['turn_r'], speed['slow']))
+rule13 = ctrl.Rule(dis_l['far'] & ~dis_lf['close'] & goal_position['left'], (steer_angle['turn_l'], speed['slow']))
+rule14 = ctrl.Rule(~dis_l['far'] & dis_f['far'] & goal_position['left'], (steer_angle['forward'], speed['quick']))
+rule15 = ctrl.Rule(~dis_l['far'] & ~dis_f['far'] & ~dis_rf['close'] & dis_r['far'] & goal_position['left'], (steer_angle['turn_r'], speed['slow']))
+rule16 = ctrl.Rule(dis_l['close'] & ~dis_f['close'] & ~dis_rf['close'] & ~dis_r['close'] & goal_position['left'], (steer_angle['turn_r'], speed['slow']))
 
-rule15 = ctrl.Rule(~dis_rf['close'] & dis_r['far'] & goal_position['right'], (steer_angle['turn_r'], speed['slow']))
-rule16 = ctrl.Rule(dis_f['far'] & ~dis_r['far'] & goal_position['right'], (steer_angle['forward'], speed['quick']))
-rule17 = ctrl.Rule(dis_l['far'] & ~dis_lf['close'] & ~dis_f['far'] & ~dis_r['far'] & goal_position['right'], (steer_angle['turn_l'], speed['slow']))
-rule18 = ctrl.Rule(~dis_l['close'] & ~dis_lf['close'] & ~dis_f['close'] & dis_r['close'] & goal_position['right'], (steer_angle['turn_l'], speed['slow']))
+rule17 = ctrl.Rule(~dis_rf['close'] & dis_r['far'] & goal_position['right'], (steer_angle['turn_r'], speed['slow']))
+rule18 = ctrl.Rule(dis_f['far'] & ~dis_r['far'] & goal_position['right'], (steer_angle['forward'], speed['quick']))
+rule19 = ctrl.Rule(dis_l['far'] & ~dis_lf['close'] & ~dis_f['far'] & ~dis_r['far'] & goal_position['right'], (steer_angle['turn_l'], speed['slow']))
+rule20 = ctrl.Rule(~dis_l['close'] & ~dis_lf['close'] & ~dis_f['close'] & dis_r['close'] & goal_position['right'], (steer_angle['turn_l'], speed['slow']))
 
-rule19 = ctrl.Rule(dis_lf['close'] & dis_rf['near'], (steer_angle['turn_r'], speed['slow']))
-rule20 = ctrl.Rule(dis_lf['close'] & dis_rf['far'], (steer_angle['turn_r'], speed['slow']))
-rule21 = ctrl.Rule(dis_lf['near'] & dis_rf['far'], (steer_angle['turn_rsmall'], speed['slow']))
-rule22 = ctrl.Rule(dis_lf['near'] & dis_rf['close'], (steer_angle['turn_l'], speed['slow']))
-rule23 = ctrl.Rule(dis_lf['far'] & dis_rf['close'], (steer_angle['turn_l'], speed['slow']))
-rule24 = ctrl.Rule(dis_lf['far'] & dis_rf['near'], (steer_angle['turn_lsmall'], speed['slow']))
+rule21 = ctrl.Rule(dis_lf['close'] & dis_rf['near'], (steer_angle['turn_r'], speed['slow']))
+rule22 = ctrl.Rule(dis_lf['close'] & dis_rf['far'], (steer_angle['turn_r'], speed['slow']))
+rule23 = ctrl.Rule(dis_lf['near'] & dis_rf['far'], (steer_angle['turn_rsmall'], speed['slow']))
+rule24 = ctrl.Rule(dis_lf['near'] & dis_rf['close'], (steer_angle['turn_l'], speed['slow']))
+rule25 = ctrl.Rule(dis_lf['far'] & dis_rf['close'], (steer_angle['turn_l'], speed['slow']))
+rule26 = ctrl.Rule(dis_lf['far'] & dis_rf['near'], (steer_angle['turn_lsmall'], speed['slow']))
 
 # =============================================================================
 # rule1.view()
 # rule2.view()
 # =============================================================================
 
-car_ctrl = ctrl.ControlSystem([rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9, rule10, rule11, rule12, rule13, rule14, rule15, rule16, rule17, rule18, rule19, rule20, rule21, rule22, rule23, rule24])
+car_ctrl = ctrl.ControlSystem([rule1, rule2, rule3, rule4, rule5, rule6, rule7, rule8, rule9, rule10, rule11, rule12, rule13, rule14, rule15, rule16, rule17, rule18, rule19, rule20, rule21, rule22, rule23, rule24, rule25, rule26])
 car = ctrl.ControlSystemSimulation(car_ctrl)
 
 # =============================================================================

@@ -76,7 +76,7 @@ if (clientID>-1)
         [returnCode,rel_pos]=vrep.simxGetObjectPosition(clientID,tar_pos,car_pos,vrep.simx_opmode_buffer);
         [returnCode,detectionState,detectedPoint,~,~]=vrep.simxReadProximitySensor(clientID,front_sensor,vrep.simx_opmode_buffer);
         [returnCode,resolution,image]=vrep.simxGetVisionSensorImage2(clientID,camera,0,vrep.simx_opmode_buffer);
-        imshow(image);
+        %imshow(image);
         %processing distance
         dis_l=norm(detectedPoint_l);
         if detectionState_l == 0

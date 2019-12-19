@@ -131,7 +131,7 @@ if clientID!=-1:
         #image processing
         im = np.array(image, dtype=np.uint8)
         im.resize([128,128,3])
-        mlp.imsave('/home/jason/repositories/img/'+str(i).zfill(4)+' '+str(a)+'.png',im,origin='lower')
+        mlp.imsave('../../img/'+str(i).zfill(4)+' '+str(a)+'.png',im,origin='lower')
         
         time.sleep(0.1)
     #stop the car
